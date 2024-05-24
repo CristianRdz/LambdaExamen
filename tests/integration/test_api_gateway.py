@@ -9,6 +9,10 @@ Make sure env variable AWS_SAM_STACK_NAME exists with the name of the stack we a
 """
 
 
+class StackNotFoundError(ValueError):
+    """Raised when a specific stack cannot be found."""
+
+
 class TestApiGateway:
 
     @pytest.fixture()
@@ -24,7 +28,7 @@ class TestApiGateway:
         try:
             response = client.describe_stacks(StackName=stack_name)
         except Exception as e:
-            raise Exception(
+            raise StackNotFoundError(
                 f"Cannot find stack {stack_name} \n" f'Please make sure a stack with the name "{stack_name}" exists'
             ) from e
 
